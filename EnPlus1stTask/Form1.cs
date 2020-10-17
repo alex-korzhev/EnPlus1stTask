@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.IO;
 
 namespace EnPlus1stTask
 {
-
-   
 
     public partial class Form1 : Form
     {
@@ -35,12 +29,6 @@ namespace EnPlus1stTask
         private void btn_fill_table_Click(object sender, EventArgs e)
         {
             dbHandler.FillDB();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            dbHandler.ReadDB();
-            dbHandler.ReadDB2();
         }
 
         private void RepopulateCBProducts()
@@ -103,11 +91,6 @@ namespace EnPlus1stTask
 
         }
 
-        private void cb_Products_SelectionChangeCommitted(object sender, EventArgs e)
-        {
-            //MessageBox.Show(cb_Products.SelectedItem.ToString());
-        }
-
         private void btn_make_purchase_Click(object sender, EventArgs e)
         {
             if(dbHandler.MakePurchase(cb_Products.Text,
@@ -132,42 +115,6 @@ namespace EnPlus1stTask
             showReport();
         }
 
-
-
-
-        /* VOID
-        private void button1_Click(object sender, EventArgs e)
-        {
-            SQLiteConnection.CreateFile("TEST1.sqlite");
-            SQLiteConnection connection;
-            connection = new SQLiteConnection("Data Source=TEST1.sqlite;Version=3;");
-            connection.Open();
-            string sql = "create table highscores (name varchar(20), score int)";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            command.ExecuteNonQuery();
-            sql = "insert into highscores (name, score) values ('Me', 3000)";
-            command = new SQLiteCommand(sql, connection);
-            command.ExecuteNonQuery();
-            sql = "insert into highscores (name, score) values ('Myself', 6000)";
-            command = new SQLiteCommand(sql, connection);
-            command.ExecuteNonQuery();
-            sql = "insert into highscores (name, score) values ('And I', 9001)";
-            command = new SQLiteCommand(sql, connection);
-            command.ExecuteNonQuery();
-            connection.Close();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            SQLiteConnection connection = new SQLiteConnection("Data Source=TEST1.sqlite;Version=3;");
-            connection.Open();
-            string sql = "select * from highscores order by score desc";
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-                Console.WriteLine("Name: " + reader["name"] + "\tScore: " + reader["score"]);
-        }
-        */
     }
 
     public class Product
@@ -213,7 +160,6 @@ namespace EnPlus1stTask
                 @"WHERE purchases.date BETWEEN '" + dateFrom + "' AND '" + dateTo + "' " +
                 " group by products.name order by GTNR, products.name, OrderNr;";
           
-
             using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
             {
                 connection.Open();
@@ -255,6 +201,7 @@ namespace EnPlus1stTask
             }
 
         }
+
         public bool MakePurchase(string productName, string date, double cost, int quantity) 
         {
             int product_id;
@@ -305,124 +252,10 @@ namespace EnPlus1stTask
             return existingProducts;
         }
 
-        public void ReadDB2()
-        {
-            string sql3 = "SELECT products.name, '1' as OrderNr, '1' AS GTNR, purchases.date, purchases.cost, purchases.quantity " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-            " union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost)," +
-            "SUM(purchases.quantity) " +
-            "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-            "union all select products.name ||' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
-            "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-            " group by products.name order by GTNR, products.name, OrderNr;";
-
-            string dateFrom = "2020-10-18";
-
-            string dateTo = "2020-10-20";
-
-            string sqlv = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
-                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > '2020-10-16' " +
-                "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost), " +
-                "SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > '2020-10-16' " +
-                "union all select products.name || ' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > '2020-10-16' " +
-                "group by products.name order by GTNR, products.name, OrderNr;";
-
-            string sqlt = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
-                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > 2020-10-16 " +
-                "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost), " +
-                "SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > 2020-10-16 " +
-                "union all select products.name || ' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > 2020-10-16 " +
-                "group by products.name order by GTNR, products.name, OrderNr;";
-            string sql1 = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
-                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > '2020-10-16' " + 
-                "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost)," +
-                "SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > '2020-10-16' " +
-                "union all select products.name ||' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date > '2020-10-16' " +
-                " group by products.name order by GTNR, products.name, OrderNr;";
-            
-            string sql333 = "SELECT products.name as 'Товар', " +
-                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id" +
-                //"WHERE purchases.date > 2020-10-16;";
-                "";
-
-
-            string sql = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
-                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date BETWEEN '2020-10-16' AND '2020-10-20' " +
-                "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost)," +
-                "SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date BETWEEN '2020-10-16' AND '2020-10-20' " +
-                "union all select products.name ||' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "WHERE purchases.date BETWEEN '2020-10-16' AND '2020-10-20' " +
-                " group by products.name order by GTNR, products.name, OrderNr;";
-
-            //MessageBox.Show(sql);
-            using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
-            {
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
-                {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Console.WriteLine("Name: " + reader["Товар"] + 
-                                " - date: " + reader["Дата покупки"] +
-                    " - cost: " + reader["Цена"] + " - quant: " + reader["Количество"]);
-                        }
-                    }
-                }
-            }
-        }
-
-        public void ReadDB()
-        {
-            string sql = "SELECT products.name, purchases.date, purchases.cost, purchases.quantity " +
-                    "FROM purchases INNER JOIN products ON purchases.product_id = products.id;";
-            using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
-            {
-
-                connection.Open();
-                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
-                {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                            Console.WriteLine("Name: " + reader["name"] + " - date: " + reader["date"] +
-                                " - cost: " + reader["cost"] + " - quant: " + reader["quantity"]);
-                    }
-                }
-            }
-            Console.WriteLine("--------------------------------");
-        }
-
         public void FillDB()
         {
             if (CheckDB())
             {
-
                 string sql = "INSERT INTO products (name) VALUES ('Яблоко'), ('Груша'), ('Апельсин'), ('Арбуз');";
                 using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
                 {
@@ -478,7 +311,6 @@ namespace EnPlus1stTask
             return true;
         }
 
-        //SELECT count(*) FROM sqlite_master WHERE type='table' AND name='table_name';
         public void InitDatabase()
         {
             if (File.Exists(dbFile)) { File.Delete(dbFile); }
