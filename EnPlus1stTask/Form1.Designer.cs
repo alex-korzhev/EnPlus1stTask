@@ -46,7 +46,6 @@
             this.tb_cost = new System.Windows.Forms.TextBox();
             this.dtp_purchase_date = new System.Windows.Forms.DateTimePicker();
             this.tab_create_table = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
             this.btn_fill_table = new System.Windows.Forms.Button();
             this.lbl_table_status = new System.Windows.Forms.Label();
             this.btn_create_table = new System.Windows.Forms.Button();
@@ -203,7 +202,6 @@
             this.cb_Products.Name = "cb_Products";
             this.cb_Products.Size = new System.Drawing.Size(170, 23);
             this.cb_Products.TabIndex = 4;
-            this.cb_Products.SelectionChangeCommitted += new System.EventHandler(this.cb_Products_SelectionChangeCommitted);
             // 
             // tb_quantity
             // 
@@ -230,7 +228,6 @@
             // 
             // tab_create_table
             // 
-            this.tab_create_table.Controls.Add(this.button1);
             this.tab_create_table.Controls.Add(this.btn_fill_table);
             this.tab_create_table.Controls.Add(this.lbl_table_status);
             this.tab_create_table.Controls.Add(this.btn_create_table);
@@ -241,16 +238,6 @@
             this.tab_create_table.TabIndex = 0;
             this.tab_create_table.Text = "Создать таблицу";
             this.tab_create_table.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(171, 70);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btn_fill_table
             // 
@@ -270,7 +257,6 @@
             this.lbl_table_status.Name = "lbl_table_status";
             this.lbl_table_status.Size = new System.Drawing.Size(250, 57);
             this.lbl_table_status.TabIndex = 1;
-            this.lbl_table_status.Text = "TABLESTATUS";
             this.lbl_table_status.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btn_create_table
@@ -302,7 +288,7 @@
             this.ClientSize = new System.Drawing.Size(540, 314);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Покупки";
             this.tab_report.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv_report)).EndInit();
             this.tab_add_purchase.ResumeLayout(false);
@@ -328,7 +314,6 @@
         private System.Windows.Forms.TextBox tb_cost;
         private System.Windows.Forms.DateTimePicker dtp_purchase_date;
         private System.Windows.Forms.TabPage tab_create_table;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btn_fill_table;
         private System.Windows.Forms.Label lbl_table_status;
         private System.Windows.Forms.Button btn_create_table;
