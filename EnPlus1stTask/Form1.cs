@@ -38,6 +38,7 @@ namespace EnPlus1stTask
         private void button1_Click(object sender, EventArgs e)
         {
             dbHandler.ReadDB();
+            dbHandler.ReadDB2();
         }
 
         private void RepopulateCBProducts()
@@ -52,6 +53,18 @@ namespace EnPlus1stTask
 
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
         {
+            if (tabControl1.SelectedTab == tabControl1.TabPages["tab_create_table"])
+            {
+                if (dbHandler.CheckDB())
+                {
+                    lbl_table_status.Text = "ТАБЛИЦА СОЗДАНА";
+                    lbl_table_status.ForeColor = Color.Green;
+                } else
+                {
+                    lbl_table_status.Text = "ТАБЛИЦА НЕ СОЗДАНА";
+                    lbl_table_status.ForeColor = Color.Red;
+                }
+            }
             if (tabControl1.SelectedTab == tabControl1.TabPages["tab_add_product"])
             {
 
@@ -234,6 +247,51 @@ namespace EnPlus1stTask
             return existingProducts;
         }
 
+        public void ReadDB2()
+        {
+            
+            string sql1 = "SELECT products.name, purchases.date, purchases.cost, purchases.quantity " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+            " union select products.name || '_Total' products.name, SUM(purchases.cost)sum," +
+            "SUM(purchases.quantity)sum1 " +
+            "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+            " group by products.name order by products.name;";
+
+            string sql = "SELECT products.name, '1' as OrderNr, '1' AS GTNR, purchases.date, purchases.cost, purchases.quantity " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+            " union all select 'Grand_total', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost)," +
+            "SUM(purchases.quantity) " +
+            "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+            "union all select products.name ||'_total', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
+            "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+            " group by products.name order by GTNR, products.name, OrderNr;";
+
+
+            string sqla = "SELECT products.name, '1' as OrderNr, purchases.date, purchases.cost, purchases.quantity " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+            " union all select products.name ||'_total', '2' AS OrderNr, ' ', SUM(purchases.cost)," +
+            "SUM(purchases.quantity) " +
+            "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+            " group by products.name order by products.name, OrderNr;";
+
+            using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Console.WriteLine("Name: " + reader["name"] + " - orderNr: " + reader["OrderNr"] + 
+                                " - date: " + reader["date"] +
+                    " - cost: " + reader["cost"] + " - quant: " + reader["quantity"]);
+                        }
+                    }
+                }
+            }
+        }
+
         public void ReadDB()
         {
             SQLiteConnection connection = new SQLiteConnection(dbConnectionString);
@@ -244,8 +302,9 @@ namespace EnPlus1stTask
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
                 Console.WriteLine("Name: " + reader["name"] + " - date: " + reader["date"] + 
-                    " - cost: " + reader["cost"] + " - quant: " + reader["quantity"]);
+                    " - cost: " + reader["cost"] + " - quant: " + reader["quantity"]);                
             connection.Close();
+            Console.WriteLine("--------------------------------");
         }
 
         public void FillDB()
