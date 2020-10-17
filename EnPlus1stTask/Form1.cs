@@ -18,6 +18,13 @@ namespace EnPlus1stTask
             InitializeComponent();
         }
 
+        private void btn_create_table_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        /* VOID
         private void button1_Click(object sender, EventArgs e)
         {
             SQLiteConnection.CreateFile("TEST1.sqlite");
@@ -49,5 +56,6 @@ namespace EnPlus1stTask
             while (reader.Read())
                 Console.WriteLine("Name: " + reader["name"] + "\tScore: " + reader["score"]);
         }
+        */
     }
 }
