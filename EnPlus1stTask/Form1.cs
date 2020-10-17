@@ -69,18 +69,25 @@ namespace EnPlus1stTask
 
         private void showReport()
         {
-            dgv_report.DataSource = dbHandler.GetReport(
+            DataSet dataSet = dbHandler.GetReport(
                 dtp_date_from.Value.ToString("yyyy-MM-dd"),
                 dtp_date_to.Value.ToString("yyyy-MM-dd"));
-            dgv_report.Columns["OrderNr"].Visible = false;
-            dgv_report.Columns["GTNR"].Visible = false;
-            dgv_report.ReadOnly = true;
-            foreach (DataGridViewColumn column in dgv_report.Columns)
+            if (dataSet.Tables[0].Rows.Count > 1) { 
+                dgv_report.DataSource = dataSet.Tables[0].DefaultView;
+                dgv_report.Columns["OrderNr"].Visible = false;
+                dgv_report.Columns["GTNR"].Visible = false;
+                dgv_report.ReadOnly = true;
+                foreach (DataGridViewColumn column in dgv_report.Columns)
+                {
+                    column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                }
+                dgv_report.AllowUserToAddRows = false;
+                dgv_report.RowHeadersVisible = false;
+            } else
             {
-                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+                MessageBox.Show("Таблица пуста");
             }
-            dgv_report.AllowUserToAddRows = false;
-            dgv_report.RowHeadersVisible = false;
+
         }
 
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
@@ -190,7 +197,7 @@ namespace EnPlus1stTask
             existingProducts = new List<Product>();
         }
 
-        public DataTable GetReport(string dateFrom, string dateTo)
+        public DataSet GetReport(string dateFrom, string dateTo)
         {
 
             string sql = @"SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
@@ -214,9 +221,10 @@ namespace EnPlus1stTask
                 {
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
-                        DataTable dt = new DataTable();
-                        dt.Load(reader);
-                        return dt;
+                        DataSet dataSet = new DataSet();
+                        var dataAdapter = new SQLiteDataAdapter(sql, connection);  
+                        dataAdapter.Fill(dataSet);
+                        return dataSet;
                     }
                 }
             }
@@ -391,16 +399,22 @@ namespace EnPlus1stTask
 
         public void ReadDB()
         {
-            SQLiteConnection connection = new SQLiteConnection(dbConnectionString);
             string sql = "SELECT products.name, purchases.date, purchases.cost, purchases.quantity " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id;";
-            connection.Open();
-            SQLiteCommand command = new SQLiteCommand(sql, connection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            while (reader.Read())
-                Console.WriteLine("Name: " + reader["name"] + " - date: " + reader["date"] + 
-                    " - cost: " + reader["cost"] + " - quant: " + reader["quantity"]);                
-            connection.Close();
+                    "FROM purchases INNER JOIN products ON purchases.product_id = products.id;";
+            using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
+            {
+
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                            Console.WriteLine("Name: " + reader["name"] + " - date: " + reader["date"] +
+                                " - cost: " + reader["cost"] + " - quant: " + reader["quantity"]);
+                    }
+                }
+            }
             Console.WriteLine("--------------------------------");
         }
 
