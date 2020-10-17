@@ -193,32 +193,19 @@ namespace EnPlus1stTask
         public DataTable GetReport(string dateFrom, string dateTo)
         {
 
-            string sql = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
+            string sql = @"SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
                 "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
                 "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                @"WHERE purchases.date BETWEEN '{dateFrom}' AND '{dateTo}' " + 
+                @"WHERE purchases.date BETWEEN '" + dateFrom + "' AND '" + dateTo + "' " + 
                 "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost)," +
                 "SUM(purchases.quantity) " +
                 "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                @"WHERE purchases.date BETWEEN '{dateFrom}' AND '{dateTo}' " +
+                @"WHERE purchases.date BETWEEN '" + dateFrom + "' AND '" + dateTo + "' " +
                 "union all select products.name ||' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
                 "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                @"WHERE purchases.date BETWEEN '{dateFrom}' AND '{dateTo}' " +
+                @"WHERE purchases.date BETWEEN '" + dateFrom + "' AND '" + dateTo + "' " +
                 " group by products.name order by GTNR, products.name, OrderNr;";
-
-
-            /*
-             *  string sql = @"SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
-                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost)," +
-                "SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                "union all select products.name ||' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
-                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
-                " group by products.name order by GTNR, products.name, OrderNr;";
-
-    */
+          
 
             using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
             {
@@ -312,7 +299,7 @@ namespace EnPlus1stTask
 
         public void ReadDB2()
         {
-            string sql1 = "SELECT products.name, '1' as OrderNr, '1' AS GTNR, purchases.date, purchases.cost, purchases.quantity " +
+            string sql3 = "SELECT products.name, '1' as OrderNr, '1' AS GTNR, purchases.date, purchases.cost, purchases.quantity " +
                 "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
             " union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost)," +
             "SUM(purchases.quantity) " +
@@ -322,8 +309,35 @@ namespace EnPlus1stTask
             " group by products.name order by GTNR, products.name, OrderNr;";
 
             string dateFrom = "2020-10-18";
+
             string dateTo = "2020-10-20";
-            string sql = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
+
+            string sqlv = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
+                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date > '2020-10-16' " +
+                "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost), " +
+                "SUM(purchases.quantity) " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date > '2020-10-16' " +
+                "union all select products.name || ' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date > '2020-10-16' " +
+                "group by products.name order by GTNR, products.name, OrderNr;";
+
+            string sqlt = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
+                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date > 2020-10-16 " +
+                "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost), " +
+                "SUM(purchases.quantity) " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date > 2020-10-16 " +
+                "union all select products.name || ' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date > 2020-10-16 " +
+                "group by products.name order by GTNR, products.name, OrderNr;";
+            string sql1 = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
                 "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
                 "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
                 "WHERE purchases.date > '2020-10-16' " + 
@@ -335,7 +349,28 @@ namespace EnPlus1stTask
                 "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
                 "WHERE purchases.date > '2020-10-16' " +
                 " group by products.name order by GTNR, products.name, OrderNr;";
+            
+            string sql333 = "SELECT products.name as 'Товар', " +
+                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id" +
+                //"WHERE purchases.date > 2020-10-16;";
+                "";
 
+
+            string sql = "SELECT products.name as 'Товар', '1' as OrderNr, '1' AS GTNR, " +
+                "purchases.date as 'Дата покупки', purchases.cost as 'Цена', purchases.quantity as 'Количество' " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date BETWEEN '2020-10-16' AND '2020-10-20' " +
+                "union all select 'Общий итог', '2' AS OrderNr, '2' AS GTNR, ' ', SUM(purchases.cost)," +
+                "SUM(purchases.quantity) " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date BETWEEN '2020-10-16' AND '2020-10-20' " +
+                "union all select products.name ||' итого', '3' AS OrderNr, '1' AS GTNR,' ', SUM(purchases.cost), SUM(purchases.quantity) " +
+                "FROM purchases INNER JOIN products ON purchases.product_id = products.id " +
+                "WHERE purchases.date BETWEEN '2020-10-16' AND '2020-10-20' " +
+                " group by products.name order by GTNR, products.name, OrderNr;";
+
+            //MessageBox.Show(sql);
             using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
             {
                 connection.Open();
@@ -345,9 +380,9 @@ namespace EnPlus1stTask
                     {
                         while (reader.Read())
                         {
-                            Console.WriteLine("Name: " + reader["name"] + 
-                                " - date: " + reader["date"] +
-                    " - cost: " + reader["cost"] + " - quant: " + reader["quantity"]);
+                            Console.WriteLine("Name: " + reader["Товар"] + 
+                                " - date: " + reader["Дата покупки"] +
+                    " - cost: " + reader["Цена"] + " - quant: " + reader["Количество"]);
                         }
                     }
                 }
@@ -445,7 +480,7 @@ namespace EnPlus1stTask
                 }
 
                 sql = "CREATE TABLE purchases (id INTEGER PRIMARY KEY, product_id INTEGER NOT NULL," +
-                " date DATE NOT NULL, cost REAL NOT NULL, quantity INTEGER NOT NULL," +
+                " date TEXT NOT NULL, cost REAL NOT NULL, quantity INTEGER NOT NULL," +
                 " FOREIGN KEY (product_id) REFERENCES products(id));";
                 using (SQLiteCommand command = new SQLiteCommand(sql, connection))
                 {
