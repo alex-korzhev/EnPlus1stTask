@@ -40,6 +40,29 @@ namespace EnPlus1stTask
             dbHandler.ReadDB();
         }
 
+        private void tabControl1_Selected(object sender, TabControlEventArgs e)
+        {
+            if (tabControl1.SelectedTab == tabControl1.TabPages["tab_add_product"])
+            {
+
+            }
+            if (tabControl1.SelectedTab == tabControl1.TabPages["tab_add_purchase"])
+            {
+                List<Product> lp = dbHandler.GetProducts();
+                foreach (Product p in lp)
+                {
+                    //lb_products.Items.Add(p);
+                    cb_Products.Items.Add(p);
+                }
+            }
+
+        }
+
+        private void cb_Products_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            MessageBox.Show(cb_Products.SelectedItem.ToString());
+        }
+
 
 
 
@@ -78,12 +101,50 @@ namespace EnPlus1stTask
         */
     }
 
+    public class Product
+    {
+        public string Value { get; set; }
+        public int Tag { get; set; }
+        
+        public Product(string value, int tag)
+        {
+            Value = value;
+            Tag = tag;
+        }
+
+        public override string ToString()
+        {
+            return Value;
+        }
+    }
+
     public class DBHandler
     {
         private readonly string dbFile = "PurchasesProducts.sqlite";
         private readonly string dbConnectionString = "Data Source=PurchasesProducts.sqlite;Version=3";
 
         public DBHandler() { }
+
+        public List<Product> GetProducts()
+        {
+            List<Product> p = new List<Product>();
+            string sql = "SELECT id, name FROM products;";
+            using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            p.Add(new Product(reader["name"].ToString(), Int32.Parse(reader["id"].ToString())));
+                        }
+                    }
+                }
+            }
+            return p;
+        }
 
         /*
          * SELECT columns

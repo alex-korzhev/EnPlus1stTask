@@ -30,10 +30,12 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tab_create_table = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.btn_fill_table = new System.Windows.Forms.Button();
             this.lbl_table_status = new System.Windows.Forms.Label();
             this.btn_create_table = new System.Windows.Forms.Button();
             this.tab_add_purchase = new System.Windows.Forms.TabPage();
+            this.cb_Products = new System.Windows.Forms.ComboBox();
             this.tb_quantity = new System.Windows.Forms.TextBox();
             this.tb_cost = new System.Windows.Forms.TextBox();
             this.lb_products = new System.Windows.Forms.ListBox();
@@ -43,7 +45,6 @@
             this.tb_add_product_name = new System.Windows.Forms.TextBox();
             this.tab_report = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tab_create_table.SuspendLayout();
             this.tab_add_purchase.SuspendLayout();
@@ -63,6 +64,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(776, 426);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
             // tab_create_table
             // 
@@ -77,6 +79,16 @@
             this.tab_create_table.TabIndex = 0;
             this.tab_create_table.Text = "Создать таблицу";
             this.tab_create_table.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(443, 295);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 3;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btn_fill_table
             // 
@@ -109,6 +121,7 @@
             // 
             // tab_add_purchase
             // 
+            this.tab_add_purchase.Controls.Add(this.cb_Products);
             this.tab_add_purchase.Controls.Add(this.tb_quantity);
             this.tab_add_purchase.Controls.Add(this.tb_cost);
             this.tab_add_purchase.Controls.Add(this.lb_products);
@@ -120,6 +133,15 @@
             this.tab_add_purchase.TabIndex = 1;
             this.tab_add_purchase.Text = "Добавить покупку";
             this.tab_add_purchase.UseVisualStyleBackColor = true;
+            // 
+            // cb_Products
+            // 
+            this.cb_Products.FormattingEnabled = true;
+            this.cb_Products.Location = new System.Drawing.Point(213, 7);
+            this.cb_Products.Name = "cb_Products";
+            this.cb_Products.Size = new System.Drawing.Size(121, 21);
+            this.cb_Products.TabIndex = 4;
+            this.cb_Products.SelectionChangeCommitted += new System.EventHandler(this.cb_Products_SelectionChangeCommitted);
             // 
             // tb_quantity
             // 
@@ -138,7 +160,9 @@
             // lb_products
             // 
             this.lb_products.FormattingEnabled = true;
-            this.lb_products.Location = new System.Drawing.Point(214, 7);
+            this.lb_products.Items.AddRange(new object[] {
+            "3"});
+            this.lb_products.Location = new System.Drawing.Point(204, 172);
             this.lb_products.Name = "lb_products";
             this.lb_products.Size = new System.Drawing.Size(120, 95);
             this.lb_products.TabIndex = 1;
@@ -195,16 +219,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(762, 394);
             this.dataGridView1.TabIndex = 0;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(443, 295);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,6 +257,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btn_fill_table;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ComboBox cb_Products;
     }
 }
 
