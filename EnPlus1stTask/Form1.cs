@@ -40,6 +40,16 @@ namespace EnPlus1stTask
             dbHandler.ReadDB();
         }
 
+        private void RepopulateCBProducts()
+        {
+            cb_Products.Items.Clear();
+            List<Product> lp = dbHandler.GetProducts();
+            foreach (Product p in lp)
+            {
+                cb_Products.Items.Add(p);
+            }
+        }
+
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
         {
             if (tabControl1.SelectedTab == tabControl1.TabPages["tab_add_product"])
@@ -48,19 +58,33 @@ namespace EnPlus1stTask
             }
             if (tabControl1.SelectedTab == tabControl1.TabPages["tab_add_purchase"])
             {
-                List<Product> lp = dbHandler.GetProducts();
-                foreach (Product p in lp)
-                {
-                    //lb_products.Items.Add(p);
-                    cb_Products.Items.Add(p);
-                }
+                RepopulateCBProducts();
             }
 
         }
 
         private void cb_Products_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            MessageBox.Show(cb_Products.SelectedItem.ToString());
+            //MessageBox.Show(cb_Products.SelectedItem.ToString());
+        }
+
+        private void btn_make_purchase_Click(object sender, EventArgs e)
+        {
+            if(dbHandler.MakePurchase(cb_Products.Text,
+                dtp_purchase_date.Value.ToString("yyyy-MM-dd"),
+                Double.Parse(tb_cost.Text),
+                Int32.Parse(tb_quantity.Text)))
+            {
+                MessageBox.Show("Покупка совершена");
+                RepopulateCBProducts();
+                cb_Products.Text = "";
+                dtp_purchase_date.Value = DateTime.Today;
+                tb_cost.Text = "";
+                tb_quantity.Text = "";
+            } else
+            {
+                MessageBox.Show("ОШИБКА!");
+            }
         }
 
 
@@ -122,12 +146,75 @@ namespace EnPlus1stTask
     {
         private readonly string dbFile = "PurchasesProducts.sqlite";
         private readonly string dbConnectionString = "Data Source=PurchasesProducts.sqlite;Version=3";
+        private List<Product> existingProducts;
 
-        public DBHandler() { }
+        public DBHandler() {
+            existingProducts = new List<Product>();
+        }
+
+        public void lp()
+        {
+            foreach (Product p in existingProducts)
+            {
+                Console.WriteLine(p.Tag + " " + p.Value);
+            }
+        }
+
+        private int InsertProduct(string productName)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
+            {
+                connection.Open();
+                string sql = $"INSERT INTO products (name) VALUES ('{productName}');";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                sql = $"SELECT id FROM products WHERE name='{productName}';";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                {
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        Product p = new Product(productName, Int32.Parse(reader["id"].ToString()));
+                        existingProducts.Add(p);
+                        return p.Tag;
+                    }
+                }
+            }
+
+        }
+        public bool MakePurchase(string productName, string date, double cost, int quantity) 
+        {
+            int product_id;
+            if (!CheckProductExists(productName))
+            {
+                product_id = InsertProduct(productName);
+            } else
+            {
+                product_id = existingProducts.Find(ep => ep.Value == productName).Tag;
+            }
+            string sql = $"INSERT INTO purchases (product_id, date, cost, quantity) " +
+                $"VALUES ({product_id}, '{date}', {cost}, {quantity});";
+            using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
+                {
+                    return (command.ExecuteNonQuery() == 1) ? true : false;
+                }
+            }
+
+        }
+
+        private bool CheckProductExists(String productName)
+        {
+            return existingProducts.Exists(ep => ep.Value == productName);
+        }
 
         public List<Product> GetProducts()
         {
-            List<Product> p = new List<Product>();
+            existingProducts.Clear();
             string sql = "SELECT id, name FROM products;";
             using (SQLiteConnection connection = new SQLiteConnection(dbConnectionString))
             {
@@ -138,22 +225,14 @@ namespace EnPlus1stTask
                     {
                         while (reader.Read())
                         {
-                            p.Add(new Product(reader["name"].ToString(), Int32.Parse(reader["id"].ToString())));
+                            existingProducts.Add(new Product(reader["name"].ToString(), 
+                                Int32.Parse(reader["id"].ToString())));
                         }
                     }
                 }
             }
-            return p;
+            return existingProducts;
         }
-
-        /*
-         * SELECT columns
-            FROM table1 
-            INNER JOIN table2
-            ON table1.column = table2.column;
-         * 
-         * 
-         */
 
         public void ReadDB()
         {

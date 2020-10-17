@@ -35,16 +35,16 @@
             this.lbl_table_status = new System.Windows.Forms.Label();
             this.btn_create_table = new System.Windows.Forms.Button();
             this.tab_add_purchase = new System.Windows.Forms.TabPage();
-            this.cb_Products = new System.Windows.Forms.ComboBox();
             this.tb_quantity = new System.Windows.Forms.TextBox();
             this.tb_cost = new System.Windows.Forms.TextBox();
-            this.lb_products = new System.Windows.Forms.ListBox();
             this.dtp_purchase_date = new System.Windows.Forms.DateTimePicker();
             this.tab_add_product = new System.Windows.Forms.TabPage();
             this.btn_add_product = new System.Windows.Forms.Button();
             this.tb_add_product_name = new System.Windows.Forms.TextBox();
             this.tab_report = new System.Windows.Forms.TabPage();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.cb_Products = new System.Windows.Forms.ComboBox();
+            this.btn_make_purchase = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tab_create_table.SuspendLayout();
             this.tab_add_purchase.SuspendLayout();
@@ -121,10 +121,10 @@
             // 
             // tab_add_purchase
             // 
+            this.tab_add_purchase.Controls.Add(this.btn_make_purchase);
             this.tab_add_purchase.Controls.Add(this.cb_Products);
             this.tab_add_purchase.Controls.Add(this.tb_quantity);
             this.tab_add_purchase.Controls.Add(this.tb_cost);
-            this.tab_add_purchase.Controls.Add(this.lb_products);
             this.tab_add_purchase.Controls.Add(this.dtp_purchase_date);
             this.tab_add_purchase.Location = new System.Drawing.Point(4, 22);
             this.tab_add_purchase.Name = "tab_add_purchase";
@@ -134,44 +134,25 @@
             this.tab_add_purchase.Text = "Добавить покупку";
             this.tab_add_purchase.UseVisualStyleBackColor = true;
             // 
-            // cb_Products
-            // 
-            this.cb_Products.FormattingEnabled = true;
-            this.cb_Products.Location = new System.Drawing.Point(213, 7);
-            this.cb_Products.Name = "cb_Products";
-            this.cb_Products.Size = new System.Drawing.Size(121, 21);
-            this.cb_Products.TabIndex = 4;
-            this.cb_Products.SelectionChangeCommitted += new System.EventHandler(this.cb_Products_SelectionChangeCommitted);
-            // 
             // tb_quantity
             // 
-            this.tb_quantity.Location = new System.Drawing.Point(448, 6);
+            this.tb_quantity.Location = new System.Drawing.Point(389, 8);
             this.tb_quantity.Name = "tb_quantity";
             this.tb_quantity.Size = new System.Drawing.Size(100, 20);
             this.tb_quantity.TabIndex = 3;
             // 
             // tb_cost
             // 
-            this.tb_cost.Location = new System.Drawing.Point(341, 7);
+            this.tb_cost.Location = new System.Drawing.Point(283, 8);
             this.tb_cost.Name = "tb_cost";
             this.tb_cost.Size = new System.Drawing.Size(100, 20);
             this.tb_cost.TabIndex = 2;
-            // 
-            // lb_products
-            // 
-            this.lb_products.FormattingEnabled = true;
-            this.lb_products.Items.AddRange(new object[] {
-            "3"});
-            this.lb_products.Location = new System.Drawing.Point(204, 172);
-            this.lb_products.Name = "lb_products";
-            this.lb_products.Size = new System.Drawing.Size(120, 95);
-            this.lb_products.TabIndex = 1;
             // 
             // dtp_purchase_date
             // 
             this.dtp_purchase_date.Location = new System.Drawing.Point(7, 7);
             this.dtp_purchase_date.Name = "dtp_purchase_date";
-            this.dtp_purchase_date.Size = new System.Drawing.Size(200, 20);
+            this.dtp_purchase_date.Size = new System.Drawing.Size(143, 20);
             this.dtp_purchase_date.TabIndex = 0;
             // 
             // tab_add_product
@@ -219,6 +200,25 @@
             this.dataGridView1.Size = new System.Drawing.Size(762, 394);
             this.dataGridView1.TabIndex = 0;
             // 
+            // cb_Products
+            // 
+            this.cb_Products.FormattingEnabled = true;
+            this.cb_Products.Location = new System.Drawing.Point(156, 7);
+            this.cb_Products.Name = "cb_Products";
+            this.cb_Products.Size = new System.Drawing.Size(121, 21);
+            this.cb_Products.TabIndex = 4;
+            this.cb_Products.SelectionChangeCommitted += new System.EventHandler(this.cb_Products_SelectionChangeCommitted);
+            // 
+            // btn_make_purchase
+            // 
+            this.btn_make_purchase.Location = new System.Drawing.Point(495, 8);
+            this.btn_make_purchase.Name = "btn_make_purchase";
+            this.btn_make_purchase.Size = new System.Drawing.Size(75, 23);
+            this.btn_make_purchase.TabIndex = 5;
+            this.btn_make_purchase.Text = "Купить";
+            this.btn_make_purchase.UseVisualStyleBackColor = true;
+            this.btn_make_purchase.Click += new System.EventHandler(this.btn_make_purchase_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -249,7 +249,6 @@
         private System.Windows.Forms.Button btn_create_table;
         private System.Windows.Forms.TextBox tb_quantity;
         private System.Windows.Forms.TextBox tb_cost;
-        private System.Windows.Forms.ListBox lb_products;
         private System.Windows.Forms.DateTimePicker dtp_purchase_date;
         private System.Windows.Forms.TabPage tab_add_product;
         private System.Windows.Forms.Button btn_add_product;
@@ -258,6 +257,7 @@
         private System.Windows.Forms.Button btn_fill_table;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ComboBox cb_Products;
+        private System.Windows.Forms.Button btn_make_purchase;
     }
 }
 
