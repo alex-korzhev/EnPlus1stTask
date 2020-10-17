@@ -29,7 +29,12 @@
         private void InitializeComponent()
         {
             this.tab_report = new System.Windows.Forms.TabPage();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btn_generate_report = new System.Windows.Forms.Button();
+            this.dtp_date_to = new System.Windows.Forms.DateTimePicker();
+            this.dtp_date_from = new System.Windows.Forms.DateTimePicker();
+            this.lbl_date_to = new System.Windows.Forms.Label();
+            this.lbl_date_from = new System.Windows.Forms.Label();
+            this.dgv_report = new System.Windows.Forms.DataGridView();
             this.tab_add_purchase = new System.Windows.Forms.TabPage();
             this.lbl_quantity = new System.Windows.Forms.Label();
             this.lbl_cost = new System.Windows.Forms.Label();
@@ -47,7 +52,7 @@
             this.btn_create_table = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tab_report.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_report)).BeginInit();
             this.tab_add_purchase.SuspendLayout();
             this.tab_create_table.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -55,7 +60,12 @@
             // 
             // tab_report
             // 
-            this.tab_report.Controls.Add(this.dataGridView1);
+            this.tab_report.Controls.Add(this.btn_generate_report);
+            this.tab_report.Controls.Add(this.dtp_date_to);
+            this.tab_report.Controls.Add(this.dtp_date_from);
+            this.tab_report.Controls.Add(this.lbl_date_to);
+            this.tab_report.Controls.Add(this.lbl_date_from);
+            this.tab_report.Controls.Add(this.dgv_report);
             this.tab_report.Location = new System.Drawing.Point(4, 22);
             this.tab_report.Name = "tab_report";
             this.tab_report.Size = new System.Drawing.Size(514, 272);
@@ -63,13 +73,57 @@
             this.tab_report.Text = "Отчет";
             this.tab_report.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // btn_generate_report
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(511, 269);
-            this.dataGridView1.TabIndex = 0;
+            this.btn_generate_report.Location = new System.Drawing.Point(302, 6);
+            this.btn_generate_report.Name = "btn_generate_report";
+            this.btn_generate_report.Size = new System.Drawing.Size(209, 47);
+            this.btn_generate_report.TabIndex = 12;
+            this.btn_generate_report.Text = "Сформировать отчёт";
+            this.btn_generate_report.UseVisualStyleBackColor = true;
+            this.btn_generate_report.Click += new System.EventHandler(this.btn_generate_report_Click);
+            // 
+            // dtp_date_to
+            // 
+            this.dtp_date_to.Location = new System.Drawing.Point(125, 33);
+            this.dtp_date_to.Name = "dtp_date_to";
+            this.dtp_date_to.Size = new System.Drawing.Size(170, 20);
+            this.dtp_date_to.TabIndex = 11;
+            // 
+            // dtp_date_from
+            // 
+            this.dtp_date_from.Location = new System.Drawing.Point(125, 6);
+            this.dtp_date_from.Name = "dtp_date_from";
+            this.dtp_date_from.Size = new System.Drawing.Size(170, 20);
+            this.dtp_date_from.TabIndex = 10;
+            // 
+            // lbl_date_to
+            // 
+            this.lbl_date_to.BackColor = System.Drawing.Color.LightGray;
+            this.lbl_date_to.Location = new System.Drawing.Point(19, 32);
+            this.lbl_date_to.Name = "lbl_date_to";
+            this.lbl_date_to.Size = new System.Drawing.Size(100, 21);
+            this.lbl_date_to.TabIndex = 9;
+            this.lbl_date_to.Text = "Дата по:";
+            this.lbl_date_to.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lbl_date_from
+            // 
+            this.lbl_date_from.BackColor = System.Drawing.Color.LightGray;
+            this.lbl_date_from.Location = new System.Drawing.Point(19, 5);
+            this.lbl_date_from.Name = "lbl_date_from";
+            this.lbl_date_from.Size = new System.Drawing.Size(100, 21);
+            this.lbl_date_from.TabIndex = 8;
+            this.lbl_date_from.Text = "Дата с:";
+            this.lbl_date_from.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // dgv_report
+            // 
+            this.dgv_report.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_report.Location = new System.Drawing.Point(4, 57);
+            this.dgv_report.Name = "dgv_report";
+            this.dgv_report.Size = new System.Drawing.Size(510, 215);
+            this.dgv_report.TabIndex = 0;
             // 
             // tab_add_purchase
             // 
@@ -250,7 +304,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.tab_report.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_report)).EndInit();
             this.tab_add_purchase.ResumeLayout(false);
             this.tab_add_purchase.PerformLayout();
             this.tab_create_table.ResumeLayout(false);
@@ -262,7 +316,7 @@
         #endregion
 
         private System.Windows.Forms.TabPage tab_report;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgv_report;
         private System.Windows.Forms.TabPage tab_add_purchase;
         private System.Windows.Forms.Label lbl_quantity;
         private System.Windows.Forms.Label lbl_cost;
@@ -279,6 +333,11 @@
         private System.Windows.Forms.Label lbl_table_status;
         private System.Windows.Forms.Button btn_create_table;
         private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.Button btn_generate_report;
+        private System.Windows.Forms.DateTimePicker dtp_date_to;
+        private System.Windows.Forms.DateTimePicker dtp_date_from;
+        private System.Windows.Forms.Label lbl_date_to;
+        private System.Windows.Forms.Label lbl_date_from;
     }
 }
 
